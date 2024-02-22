@@ -40,21 +40,15 @@ const resolvers = {
   Query: {
     hello: () => 'Hello World!',
     notes: async () => await models.Note.find(),
-    note: (parent, args) => notes.find((note) => note.id === args.id),
+    note: async (parent, args) => await models.Note.findById(args.id),
   },
 
   Mutation: {
-    newNote: (parent, args) => {
-      const noteValue = {
-        id: String(notes.length + 1),
+    newNote: async (parent, args) =>
+      await models.Note.create({
         content: args.content,
         author: 'Adam Scott',
-      };
-
-      notes.push(noteValue);
-
-      return noteValue;
-    },
+      }),
   },
 };
 
